@@ -216,3 +216,19 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Custom Docker & Ingestion Logs
+*.log
+mosquitto/data/
+mosquitto/log/
+prometheus/data/
+grafana/data/
+
+# Hardware & Firmware Build Files
+*.elf
+*.hex
+*.bin
+
+# Local Environment Secrets
+.env
