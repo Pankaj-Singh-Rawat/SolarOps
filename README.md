@@ -97,12 +97,12 @@ Under normal operating conditions, these metrics are packaged into a structured 
 
 ## 4. Current Progress Status & Future Scope
 
-### 4.1 Under Progress
-* [ ] Formulated complete architectural design blueprint targeting Silicon Labs ecosystems.
-* [ ] Configured declarative `docker-compose.yml` multi-container architecture.
-* [ ] Developed modular Python Streamlit logic dashboard templates.
-* [ ] Programmed containerized scikit-learn Flask prediction service (`predict.py`).
-* [ ] Created structural automation workflow templates via GitHub Actions CI.
+### 4.1 Completed Milestones
+* [x] Formulated complete architectural design blueprint targeting Silicon Labs ecosystems.
+* [x] Configured declarative `docker-compose.yml` multi-container architecture.
+* [x] Developed modular Python Streamlit logic dashboard templates.
+* [x] Programmed containerized scikit-learn Flask prediction service (`predict.py`).
+* [x] Created structural automation workflow templates via GitHub Actions CI.
 
 ### 4.2 Future Scope
 * **Silicon Labs Native Board Implementation:** Deploying the optimized application image directly onto the physical **SiWx91x radio boards** to validate power optimization parameters in real-world environments.
