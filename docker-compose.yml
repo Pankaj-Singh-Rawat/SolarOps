@@ -1,0 +1,54 @@
+services:
+  # MQTT Broker: Backbone message system for incoming edge telemetry strings
+  mosquitto:
+    image: eclipse-mosquitto:2.0.18
+    container_name: solarops_broker
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    restart: always
+
+  # Containerized Scikit-Learn Inference Engine
+  ml_service:
+    build:
+      context: ./ml_service
+    container_name: solarops_ml_pipeline
+    ports:
+      - "5000:5000"
+    restart: always
+
+  # Time-Series System & Telemetry Telemetric Metric Scraper
+  prometheus:
+    image: prom/prometheus:v2.45.5
+    container_name: solarops_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+    restart: always
+
+  # Streamlit Core Orchestrator Dashboard Layer with Native Self-Healing Healthcheck
+  dashboard:
+    image: python:3.11-slim
+    container_name: solarops_dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - MQTT_BROKER=mosquitto
+      - ML_SERVICE_URL=http://ml_service:5000/predict
+    command: >
+      sh -c "pip install streamlit paho-mqtt requests &&
+             echo 'import streamlit as st\nst.title(\"SolarOps Grid Controller\")\nst.write(\"Awaiting data stream...\")' > app.py &&
+             streamlit run app.py --server.port=8501 --server.address=0.0.0.0"
+    depends_on:
+      - mosquitto
+      - ml_service
+
+    # DevOps Auto-Recovery Loop configuration
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    restart: on-failure
